@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Геометричний Калькулятор</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 2rem; font-size: 2.5rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .card h2 { margin-bottom: 1rem; color: #ffd700; }
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1rem;
+        }
+        input::placeholder { color: rgba(255,255,255,0.6); }
+        button {
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1rem;
+            background: #ffd700;
+            color: #1e3c72;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #ffed4e; }
+        .results { margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .result-item { display: flex; justify-content: space-between; margin: 0.5rem 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔷 Геометричний Калькулятор</h1>
+        <div class="grid">
+            <div class="card">
+                <h2>⚫ Круг</h2>
+                <input type="number" id="cR" placeholder="Радіус r">
+                <button onclick="calcCircle()">Обчислити</button>
+                <div id="cRes" class="results"></div>
+            </div>
+            <div class="card">
+                <h2>⬜ Квадрат</h2>
+                <input type="number" id="sA" placeholder="Сторона a">
+                <button onclick="calcSquare()">Обчислити</button>
+                <div id="sRes" class="results"></div>
+            </div>
+            <div class="card">
+                <h2>▭ Прямокутник</h2>
+                <input type="number" id="rA" placeholder="Сторона a">
+                <input type="number" id="rB" placeholder="Сторона b">
+                <button onclick="calcRect()">Обчислити</button>
+                <div id="rRes" class="results"></div>
+            </div>
+            <div class="card">
+                <h2>🔺 Трикутник</h2>
+                <input type="number" id="tA" placeholder="Сторона a">
+                <input type="number" id="tB" placeholder="Сторона b">
+                <input type="number" id="tC" placeholder="Сторона c">
+                <button onclick="calcTriangle()">Обчислити</button>
+                <div id="tRes" class="results"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const fmt = n => Number.isInteger(n) ? n : n.toFixed(4);
+        
+        function calcCircle() {
+            const r = parseFloat(document.getElementById('cR').value);
+            if (!r || r <= 0) return alert('Введіть радіус > 0');
+            const S = Math.PI * r * r, d = 2 * r, C = 2 * Math.PI * r;
+            document.getElementById('cRes').innerHTML = `
+                <div class="result-item"><span>Площа S:</span><b>${fmt(S)}</b></div>
+                <div class="result-item"><span>Діаметр d:</span><b>${fmt(d)}</b></div>
+                <div class="result-item"><span>Довжина C:</span><b>${fmt(C)}</b></div>`;
+        }
+        
+        function calcSquare() {
+            const a = parseFloat(document.getElementById('sA').value);
+            if (!a || a <= 0) return alert('Введіть сторону > 0');
+            const S = a * a, P = 4 * a, d = a * Math.sqrt(2), r = a / 2, R = d / 2;
+            document.getElementById('sRes').innerHTML = `
+                <div class="result-item"><span>Площа S:</span><b>${fmt(S)}</b></div>
+                <div class="result-item"><span>Периметр P:</span><b>${fmt(P)}</b></div>
+                <div class="result-item"><span>Діагональ d:</span><b>${fmt(d)}</b></div>
+                <div class="result-item"><span>r вписаного:</span><b>${fmt(r)}</b></div>
+                <div class="result-item"><span>R описаного:</span><b>${fmt(R)}</b></div>`;
+        }
+        
+        function calcRect() {
+            const a = parseFloat(document.getElementById('rA').value);
+            const b = parseFloat(document.getElementById('rB').value);
+            if (!a || !b || a <= 0 || b <= 0) return alert('Введіть сторони > 0');
+            const S = a * b, P = 2 * (a + b), d = Math.sqrt(a*a + b*b);
+            const alpha = Math.atan(b/a) * 180 / Math.PI, beta = Math.atan(a/b) * 180 / Math.PI;
+            document.getElementById('rRes').innerHTML = `
+                <div class="result-item"><span>Площа S:</span><b>${fmt(S)}</b></div>
+                <div class="result-item"><span>Периметр P:</span><b>${fmt(P)}</b></div>
+                <div class="result-item"><span>Діагональ d:</span><b>${fmt(d)}</b></div>
+                <div class="result-item"><span>Кут α:</span><b>${fmt(alpha)}°</b></div>
+                <div class="result-item"><span>Кут β:</span><b>${fmt(beta)}°</b></div>`;
+        }
+        
+        function calcTriangle() {
+            const a = parseFloat(document.getElementById('tA').value);
+            const b = parseFloat(document.getElementById('tB').value);
+            const c = parseFloat(document.getElementById('tC').value);
+            if (!a || !b || !c || a <= 0 || b <= 0 || c <= 0) return alert('Введіть всі сторони > 0');
+            if (a + b <= c || a + c <= b || b + c <= a) return alert('Трикутник не існує!');
+            const P = a + b + c, p = P / 2;
+            const S = Math.sqrt(p * (p-a) * (p-b) * (p-c));
+            const r = Math.sqrt((p-a)*(p-b)*(p-c)/p), R = (a*b*c)/(4*S);
+            document.getElementById('tRes').innerHTML = `
+                <div class="result-item"><span>Периметр P:</span><b>${fmt(P)}</b></div>
+                <div class="result-item"><span>Півпериметр p:</span><b>${fmt(p)}</b></div>
+                <div class="result-item"><span>Площа S:</span><b>${fmt(S)}</b></div>
+                <div class="result-item"><span>r вписаного:</span><b>${fmt(r)}</b></div>
+                <div class="result-item"><span>R описаного:</span><b>${fmt(R)}</b></div>`;
+        }
+    </script>
+</body>
+</html>
